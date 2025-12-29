@@ -16,6 +16,13 @@ tokio = { version = "1.0", features = ["macros", "rt-multi-thread"] }
 prost = "0.14.1"
 tonic = "0.14.2"
 tonic-prost = "0.14.2"
+tower = "0.5.2"
+http = "1.0"
+http-body = "1.0"
+http-body-util = "0.1"
+pin-project-lite = "0.2"
+bytes = "1.0"
+futures = "0.3"
 
 [build-dependencies]
 tonic-prost-build = "0.14.2"

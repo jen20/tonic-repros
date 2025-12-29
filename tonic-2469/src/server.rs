@@ -1,5 +1,8 @@
 use tonic::{Request, Response, Status, transport::Server};
 
+mod middleware;
+use middleware::PayloadSizeLayer;
+
 use hello_world::greeter_server::{Greeter, GreeterServer};
 use hello_world::{HelloReply, HelloRequest};
 
@@ -16,8 +19,6 @@ impl Greeter for MyGreeter {
         &self,
         request: Request<HelloRequest>,
     ) -> Result<Response<HelloReply>, Status> {
-        println!("Got a request: {:?}", request);
-
         let reply = HelloReply {
             message: format!("Hello {}!", request.into_inner().name),
         };
@@ -31,7 +32,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let addr = "[::1]:50051".parse()?;
     let greeter = MyGreeter::default();
 
+    println!("Server listening on {}", addr);
+
     Server::builder()
+        .layer(PayloadSizeLayer)
         .add_service(GreeterServer::new(greeter))
         .serve(addr)
         .await?;
